@@ -1,0 +1,71 @@
+function FindProxyForURL(url, host) {
+// Configuracao automatica de proxy
+// Ref.: http://technet.microsoft.com/library/Dd361918
+// Ignora o proxy para enderecos internos
+if ( isPlainHostName(host) ){return "DIRECT";}
+// Acesso direto para URLs com IPs internos
+if (  isInNet(host, "10.0.0.0",    "255.0.0.0")
+   || isInNet(host, "172.16.0.0",  "255.240.0.0")
+   || isInNet(host, "172.32.0.0",  "255.255.254.0")
+   || isInNet(host, "192.168.0.0", "255.255.0.0")
+   || isInNet(host, "127.0.0.0",   "255.0.0.0")
+   || isInNet(host, "200.143.181.26",   "255.255.255.255")
+   || isInNet(host, "177.43.220.106",   "255.255.255.255")
+   || isInNet(host, "187.32.158.33",   "255.255.255.255")
+   || isInNet(host, "201.94.150.186",   "255.255.255.255")
+   || isInNet(host, "177.185.13.56",   "255.255.255.255")
+   || isInNet(host, "177.128.40.81",   "255.255.255.255")
+   || isInNet(host, "122.100.106.207",   "255.255.255.255")
+   || isInNet(host, "122.100.106.208",   "255.255.255.255")
+   || isInNet(host, "10.250.0.91",   "255.255.255.255")
+   || isInNet(host, "10.250.0.139",   "255.255.255.255")
+   || isInNet(host, "191.241.238.94",   "255.255.255.255")
+   || isInNet(host, "186.228.0.49",   "255.255.255.255")
+   || isInNet(host, "200.217.4.49",   "255.255.255.255")
+   || isInNet(host, "65.156.1.99",   "255.255.255.255")
+   || isInNet(host, "192.203.117.159",   "255.255.255.255")
+   || isInNet(host, "177.184.2.10",   "255.255.255.255")
+   || isInNet(host, "10.250.132.11",   "255.255.255.255")
+   || isInNet(host, "162.212.45.11",   "255.255.255.255")
+   || isInNet(host, "10.191.0.129",   "255.255.255.255")
+   || isInNet(host, "200.247.115.132",   "255.255.255.255")
+   || isInNet(host, "189.124.62.40",   "255.255.255.255")
+   )
+{
+ return "DIRECT";
+}
+
+// Ignora o proxy para zonas internas
+if (   shExpMatch(host, "*rededor.com.br")
+    || shExpMatch(host, "*rede.labsdor")
+    || shExpMatch(host, "*rededor.corp")
+)
+{
+// Apenas se resolver para IPs internos
+ var resolved_ip = dnsResolve(host);
+ if (   isInNet(resolved_ip, "10.0.0.0",    "255.0.0.0")
+     || isInNet(resolved_ip, "172.16.0.0",  "255.240.0.0")
+     || isInNet(resolved_ip, "172.32.0.0",  "255.255.254.0")
+     || isInNet(resolved_ip, "192.168.0.0", "255.255.0.0")
+     || isInNet(resolved_ip, "127.0.0.0",   "255.0.0.0")
+     )
+     {return "DIRECT";}
+}
+
+// Find the 4th octet
+var myip=myIpAddress()
+var ipbits=myip.split(".")
+var myseg=parseInt(ipbits[3])
+ 
+// Check to see if the 4th octect is even or odd
+  if (myseg==Math.floor(myseg/2)*2) {
+     // Odd
+     //return "PROXY 10.25.0.227:8080";
+     return "PROXY 10.25.0.227:8080";  
+  }
+  else {
+      // Even
+      //return "PROXY 10.25.0.227:8080";
+      return "PROXY 10.25.0.227:8080"; 
+  }
+}
